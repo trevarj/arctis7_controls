@@ -14,7 +14,7 @@ Works on Windows, and most likely on Linux.
 #### Windows 
 1. Install [Zadig](https://zadig.akeo.ie/)
 1. Open it and select `Options->List All Devices`
-1. Find `Steelseries Arctis 7 (Interface 5)
+1. Find `Steelseries Arctis 7 (Interface 5)`
 1. Install the WinUSB driver to it
 
 Now you can successfully write to the device without Windows throwing a fit.
