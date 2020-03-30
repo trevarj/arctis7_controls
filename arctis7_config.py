@@ -39,7 +39,6 @@ def ctrl_led_blink(turn_on):
     # blink is 0x02, no blink is 0x00
     data_led = [0x06, 0x55, 0x01]
     data_led.append(0x02 if turn_on else 0x00)
-    
     return send_request(data_led)
 
 def send_request(data):
