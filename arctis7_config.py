@@ -5,8 +5,6 @@ import usb.control
 import usb.core
 import usb.util
 
-dev = usb.core.find(idProduct=0x12ad)
-
 def bounded_inactive_time(arg):
     time = int(arg)
     if time >= 0 and time <= 90:
@@ -75,5 +73,6 @@ def handle_args(args):
         set_turnoff_inactive(inactive_time)
         print("Inactive shutoff timer set to {0}.".format(inactive_time))
 
+dev = usb.core.find(idVendor=0x1038, idProduct=0x12ad)
 args = create_cli_parser().parse_args()
 handle_args(args)
