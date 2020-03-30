@@ -31,6 +31,7 @@ def set_mic_sidetone(level):
 def get_battery_level():
     data_battery = [0x06, 0x18]
     send_request(data_battery)
+    # dev.write(0x83, data_battery)
     ret = dev.read(0x83, size_or_buffer=8)
     # 3rd byte is the percentage
     return ret[2]
@@ -75,3 +76,4 @@ def handle_args(args):
 dev = usb.core.find(idVendor=0x1038, idProduct=0x12ad)
 args = create_cli_parser().parse_args()
 handle_args(args)
+usb.util.dispose_resources(dev)
