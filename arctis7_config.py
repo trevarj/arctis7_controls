@@ -31,7 +31,6 @@ def set_mic_sidetone(level):
 def get_battery_level():
     data_battery = [0x06, 0x18]
     send_request(data_battery)
-    # dev.write(0x83, data_battery)
     ret = dev.read(0x83, size_or_buffer=8)
     # 3rd byte is the percentage
     return ret[2]
@@ -41,6 +40,10 @@ def ctrl_led_blink(turn_on):
     data_led = [0x06, 0x55, 0x01]
     data_led.append(0x02 if turn_on else 0x00)
     return send_request(data_led)
+
+def save_state():
+    data_save = [0x06, 0x09]
+    send_request(data_save)
 
 def send_request(data):
     return dev.ctrl_transfer(0x21, 0x09, 0x0206, 5, data_or_wLength=data)
@@ -56,7 +59,7 @@ def create_cli_parser():
 def handle_args(args):
 
     if args.show_battery:
-        print("Battery level: {0}".format(str(get_battery_level())))
+        print("Battery level: {0}%".format(str(get_battery_level())))
 
     led = args.led_blink
     if led:
@@ -72,8 +75,14 @@ def handle_args(args):
     if inactive_time:
         set_turnoff_inactive(inactive_time)
         print("Inactive shutoff timer set to {0}.".format(inactive_time))
+        
 
+# get device
 dev = usb.core.find(idVendor=0x1038, idProduct=0x12ad)
+# parse cli args
 args = create_cli_parser().parse_args()
 handle_args(args)
+# save state
+save_state()
+# free device
 usb.util.dispose_resources(dev)
