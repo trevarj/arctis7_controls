@@ -4,6 +4,7 @@ from enum import Enum
 import usb.control
 import usb.core
 import usb.util
+import time
 
 def bounded_inactive_time(arg):
     time = int(arg)
@@ -31,6 +32,7 @@ def set_mic_sidetone(level):
 def get_battery_level():
     data_battery = [0x06, 0x18]
     send_request(data_battery)
+    time.sleep(1)
     ret = dev.read(0x83, size_or_buffer=8)
     # 3rd byte is the percentage
     return ret[2]
@@ -76,13 +78,17 @@ def handle_args(args):
         set_turnoff_inactive(inactive_time)
         print("Inactive shutoff timer set to {0}.".format(inactive_time))
         
-
 # get device
 dev = usb.core.find(idVendor=0x1038, idProduct=0x12ad)
 # parse cli args
 args = create_cli_parser().parse_args()
-handle_args(args)
-# save state
-save_state()
-# free device
-usb.util.dispose_resources(dev)
+try:
+    handle_args(args)
+    # save state
+    save_state()
+except usb.core.USBError as identifier:
+    print("Error occured: {}".format(identifier))
+finally:
+    # free device
+    usb.util.dispose_resources(dev)
+
