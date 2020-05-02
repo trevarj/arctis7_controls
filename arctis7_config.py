@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse
 from enum import Enum
 
@@ -32,8 +34,7 @@ def set_mic_sidetone(level):
 def get_battery_level():
     data_battery = [0x06, 0x18]
     send_request(data_battery)
-    time.sleep(1)
-    ret = dev.read(0x83, size_or_buffer=8)
+    ret = dev.read(0x83, size_or_buffer=32)
     # 3rd byte is the percentage
     return ret[2]
 
@@ -80,6 +81,10 @@ def handle_args(args):
         
 # get device
 dev = usb.core.find(idVendor=0x1038, idProduct=0x12ad)
+reattach = False
+if dev.is_kernel_driver_active(5):
+    reattach = True
+    dev.detach_kernel_driver(5)
 # parse cli args
 args = create_cli_parser().parse_args()
 try:
@@ -89,6 +94,7 @@ try:
 except usb.core.USBError as identifier:
     print("Error occured: {}".format(identifier))
 finally:
+    if reattach:
+        dev.attach_kernel_driver(5)
     # free device
     usb.util.dispose_resources(dev)
-
