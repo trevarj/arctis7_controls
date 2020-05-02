@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
 from enum import Enum
 
 import usb.control
@@ -82,7 +83,7 @@ def handle_args(args):
 # get device
 dev = usb.core.find(idVendor=0x1038, idProduct=0x12ad)
 reattach = False
-if dev.is_kernel_driver_active(5):
+if os.name != 'nt' and dev.is_kernel_driver_active(5):
     reattach = True
     dev.detach_kernel_driver(5)
 # parse cli args
