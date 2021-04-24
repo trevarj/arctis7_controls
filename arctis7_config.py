@@ -94,8 +94,10 @@ try:
     save_state()
 except usb.core.USBError as identifier:
     print("Error occured: {}".format(identifier))
+    exit(1)
 finally:
     # free device
     usb.util.dispose_resources(dev)
     if reattach:
         dev.attach_kernel_driver(5)
+    exit(0)
