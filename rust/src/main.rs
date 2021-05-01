@@ -19,6 +19,8 @@ const SIDE_TONE: [u8; 5] = [0x06, 0x35, 0x01, 00, 0x0];
 
 const SAVE_STATE: [u8; 2] = [0x06, 0x09];
 
+const INTERFACE_NUM: u8 = 5;
+
 fn set_led_blink(dev: &DeviceHandle<GlobalContext>, state: Option<LedBlink>) -> Result<()> {
     if let Some(state) = state {
         let data = match state {
@@ -57,7 +59,14 @@ fn save_state(dev: &DeviceHandle<GlobalContext>) -> Result<()> {
 }
 
 fn send_request(dev: &DeviceHandle<GlobalContext>, data: &[u8]) -> Result<usize> {
-    Ok(dev.write_control(0x21, 0x09, 0x0206, 5, data, Duration::from_secs(1))?)
+    Ok(dev.write_control(
+        0x21,
+        0x09,
+        0x0206,
+        INTERFACE_NUM.into(),
+        data,
+        Duration::from_secs(1),
+    )?)
 }
 
 fn main() -> Result<()> {
@@ -75,13 +84,14 @@ fn main() -> Result<()> {
         .open()?;
 
     dev.set_auto_detach_kernel_driver(true).unwrap_or_default();
+    dev.claim_interface(INTERFACE_NUM)?;
 
     match args {
         Args::Battery => {
             send_request(&dev, &BATTERY)?;
             let mut buf = [0; 32];
             match dev.read_interrupt(0x83, &mut buf, Duration::from_secs(5)) {
-                Ok(_) | Err(rusb::Error::Overflow) => println!("Battery level: {}%", buf[2]),
+                Ok(_) => println!("Battery level: {}%", buf[2]),
                 Err(err) => anyhow::bail!("Error reading from device: {}", err),
             }
         }
