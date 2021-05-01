@@ -6,10 +6,13 @@ I find that it makes the quality of the headset worse.
 
 Works on Windows, and most likely on Linux.
 
-## Prerequisites
+## Python Prerequisites
 - Python 3
 - PyUSB
 - libusb or some other backend for PyUSB
+
+## Rust Prerequisites
+- Rust + cargo
 
 #### Windows 
 1. Install [Zadig](https://zadig.akeo.ie/)
