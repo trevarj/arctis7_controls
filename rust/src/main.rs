@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use rusb::{DeviceHandle, GlobalContext};
 use structopt::StructOpt;
 
@@ -90,10 +90,9 @@ fn main() -> Result<()> {
         Args::Battery => {
             send_request(&dev, &BATTERY)?;
             let mut buf = [0; 32];
-            match dev.read_interrupt(0x83, &mut buf, Duration::from_secs(5)) {
-                Ok(_) => println!("Battery level: {}%", buf[2]),
-                Err(err) => anyhow::bail!("Error reading from device: {}", err),
-            }
+            dev.read_interrupt(0x83, &mut buf, Duration::from_secs(5))
+                .context("Reading from device")?;
+            println!("Battery level: {}%", buf[2])
         }
         Args::Config {
             led_blink,
