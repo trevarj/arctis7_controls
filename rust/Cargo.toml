@@ -2,6 +2,10 @@
 name = "arctis7-controls"
 version = "0.1.0"
 edition = "2021"
+description = "A utility to control the Steelseries Arctis7 Wireless Headset"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/trevarj/arctis7_controls"
+keywords = ["steelseries", "arctis", "headset"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
