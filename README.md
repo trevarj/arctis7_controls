@@ -14,6 +14,11 @@ Works on Windows, and most likely on Linux.
 ## Rust Prerequisites
 - Rust + cargo
 
+### Installation using Cargo
+```
+cargo install arctis7-controls
+```
+
 #### Windows 
 1. Install [Zadig](https://zadig.akeo.ie/)
 1. Open it and select `Options->List All Devices`
