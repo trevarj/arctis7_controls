@@ -1,6 +1,6 @@
 [package]
 name = "arctis7-controls"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "A utility to control the Steelseries Arctis7 Wireless Headset"
 license = "GPL-3.0-or-later"
