@@ -1,10 +1,10 @@
 use std::time::Duration;
 
 use anyhow::{Context, Result};
+use clap::Parser;
 use rusb::{DeviceHandle, GlobalContext};
-use structopt::StructOpt;
 
-use crate::args::{Args, InactiveOff, LedBlink, SideTone};
+use crate::args::{Cli, Commands, InactiveOff, LedBlink, SideTone};
 
 mod args;
 
@@ -28,7 +28,7 @@ fn set_led_blink(dev: &DeviceHandle<GlobalContext>, state: Option<LedBlink>) -> 
             LedBlink::Off => LED_OFF,
         };
         send_request(dev, &data)?;
-        println!("Led blink set to {:?}", state);
+        println!("LED blink set to {:?}", state);
     }
     Ok(())
 }
@@ -38,7 +38,7 @@ fn set_side_tone(dev: &DeviceHandle<GlobalContext>, state: Option<SideTone>) -> 
         let mut data = SIDE_TONE;
         data[4] = state as u8;
         send_request(dev, &data)?;
-        println!("Side tone set to {}", state);
+        println!("Side tone set to {:?}", state);
     }
     Ok(())
 }
@@ -46,7 +46,7 @@ fn set_side_tone(dev: &DeviceHandle<GlobalContext>, state: Option<SideTone>) -> 
 fn set_inactive_off(dev: &DeviceHandle<GlobalContext>, state: Option<InactiveOff>) -> Result<()> {
     if let Some(state) = state {
         let mut data = INACTIVE_OFF;
-        data[2] = state.0;
+        data[2] = state;
         send_request(dev, &data)?;
         println!("Inactive off set to {} minutes", state);
     }
@@ -70,7 +70,7 @@ fn send_request(dev: &DeviceHandle<GlobalContext>, data: &[u8]) -> Result<usize>
 }
 
 fn main() -> Result<()> {
-    let args: Args = StructOpt::from_args();
+    let args = Cli::parse();
     let mut dev = rusb::devices()?
         .iter()
         .find(|dev| {
@@ -86,15 +86,15 @@ fn main() -> Result<()> {
     dev.set_auto_detach_kernel_driver(true).unwrap_or_default();
     dev.claim_interface(INTERFACE_NUM)?;
 
-    match args {
-        Args::Battery => {
+    match args.command {
+        Commands::Battery => {
             send_request(&dev, &BATTERY)?;
             let mut buf = [0; 32];
             dev.read_interrupt(0x83, &mut buf, Duration::from_secs(5))
                 .context("Reading from device")?;
             println!("Battery level: {}%", buf[2])
         }
-        Args::Config {
+        Commands::Config {
             led_blink,
             side_tone,
             inactive_off,
