@@ -1,3 +1,6 @@
+
+[![Build](https://github.com/trevarj/arctis7_controls/actions/workflows/rust.yml/badge.svg)](https://github.com/trevarj/arctis7_controls/actions/workflows/rust.yml) ![Crates.io](https://img.shields.io/crates/v/arctis7-controls)
+
 # arctis7_controls
 Controls for Steelseries Arctis 7 (2019) wireless headset 
 
@@ -18,6 +21,12 @@ Works on Windows, and most likely on Linux.
 ```
 cargo install arctis7-controls
 ```
+or from source
+```
+git clone https://github.com/trevarj/arctis7_controls
+cd arctis7_controls/rust
+cargo install --path .
+```
 
 #### Windows 
 1. Install [Zadig](https://zadig.akeo.ie/)
@@ -26,22 +35,27 @@ cargo install arctis7-controls
 1. Install the WinUSB driver to it
 
 Now you can successfully write to the device without Windows throwing a fit.
+
+## Features
+- Check battery percentage 
+- Turn on/off LED blink on USB dongle
+- Configure microphone side-tone (hearing yourself talk)
+- Configure automatic turn off
+
 ## Usage
 
 ```
-python .\arctis7_config.py -h    
+➜  arctis7-controls --help
+A utility to control the Steelseries Arctis7 Wireless Headset
 
-usage: arctis7_config.py [-h] [-b] [-l {on,off}] [-s {OFF,LOW,MEDIUM,MAX}] [-i INACTIVE_OFF]
+Usage: arctis7-controls <COMMAND>
 
-Controls for Steelseries Arctis 7 headset.
+Commands:
+  battery  Show battery percentage
+  config   Headset configuration options
+  help     Print this message or the help of the given subcommand(s)
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -b, --show-battery    Display the battery level percentage.
-  -l {on,off}, --led-blink {on,off}
-                        Set the led blink on the transceiver.
-  -s {OFF,LOW,MEDIUM,MAX}, --sidetone {OFF,LOW,MEDIUM,MAX}
-                        Set the microphone sidetone.
-  -i INACTIVE_OFF, --inactive-off INACTIVE_OFF
-                        Set the time to shutdown when inactive in minutes (0 - 90).
+Options:
+  -h, --help     Print help information
+  -V, --version  Print version information
 ```
