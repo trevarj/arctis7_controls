@@ -11,5 +11,5 @@ keywords = ["steelseries", "arctis", "headset"]
 
 [dependencies]
 anyhow = "1.0"
-clap = { version = "4.0", features = ["derive"] }
+clap = { version = "4.1", features = ["derive"] }
 rusb = "0.9"
