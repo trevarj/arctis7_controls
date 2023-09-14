@@ -2,12 +2,14 @@
 [![Build](https://github.com/trevarj/arctis7_controls/actions/workflows/rust.yml/badge.svg)](https://github.com/trevarj/arctis7_controls/actions/workflows/rust.yml) ![Crates.io](https://img.shields.io/crates/v/arctis7-controls)
 
 # arctis7_controls
-Controls for Steelseries Arctis 7 (2019) wireless headset 
+Controls for Steelseries Arctis 7 (2019) wireless headset written in Rust or Python (your choice)
 
 Made this so I don't have to use the Steelseries control engine adware virus.
 I find that it makes the quality of the headset worse.
 
 Works on Windows, and most likely on Linux.
+
+**The Rust version is preferred and the one that will be maintained.** The Python one works still though.
 
 ## Python Prerequisites
 - Python 3
